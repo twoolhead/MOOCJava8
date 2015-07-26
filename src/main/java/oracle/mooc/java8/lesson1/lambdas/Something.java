@@ -1,4 +1,4 @@
-package oracle.mooc.java8.lambdas;
+package oracle.mooc.java8.lesson1.lambdas;
 
 /**
  * Created by Thomas on 7/20/2015.
