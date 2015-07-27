@@ -11,14 +11,16 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * @author Speakjava (simon.ritter@oracle.com)
  */
-public class Lesson2 {
+public class HomeworkLesson2 {
   private static final String WORD_REGEXP = "[- .:,]+";
 
   /**
@@ -29,17 +31,17 @@ public class Lesson2 {
   public void runExercises() throws IOException {
     System.out.println("JDK 8 Lambdas and Streams MOOC Lesson 2");
     System.out.println("Running exercise 1 solution...");
-    exercise1();
+    //exercise1();
     System.out.println("Running exercise 2 solution...");
-    exercise2();
+    //exercise2();
     System.out.println("Running exercise 3 solution...");
-    exercise3();
+    //exercise3();
     System.out.println("Running exercise 4 solution...");
-    exercise4();
+    //exercise4();
     System.out.println("Running exercise 5 solution...");
-    exercise5();
+    //exercise5();
     System.out.println("Running exercise 6 solution...");
-    exercise6();
+    //exercise6();
     System.out.println("Running exercise 7 solution...");
     exercise7();
   }
@@ -54,7 +56,12 @@ public class Lesson2 {
     List<String> list = Arrays.asList(
         "The", "Quick", "BROWN", "Fox", "Jumped", "Over", "The", "LAZY", "DOG");
 
-    /* YOUR CODE HERE */
+    List<String> listOfElementsInLowerCase = list.stream()
+            .map(String::toLowerCase)
+            .peek(System.out::println)
+            .collect(Collectors.toList());
+
+    listOfElementsInLowerCase.forEach(System.out::println);
   }
 
   /**
@@ -67,7 +74,14 @@ public class Lesson2 {
     List<String> list = Arrays.asList(
         "The", "Quick", "BROWN", "Fox", "Jumped", "Over", "The", "LAZY", "DOG");
 
-    /* YOUR CODE HERE */
+    List<String> listOfStringsInLowerWithOddLength = list.stream()
+            .filter((String s) -> s.length() % 2 != 0)
+            .peek(System.out::println)
+            .map(String::toLowerCase)
+            .peek(System.out::println)
+            .collect(Collectors.toList());
+
+    listOfStringsInLowerWithOddLength.forEach(System.out::println);
   }
 
   /**
@@ -80,7 +94,13 @@ public class Lesson2 {
     List<String> list = Arrays.asList(
         "The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog");
 
-    /* YOUR CODE HERE */
+    String builder = list.stream()
+            .skip(1)
+            .limit(3)
+            .peek(System.out::println)
+            .collect(Collectors.joining("-"));
+
+    System.out.println(builder);
   }
 
   /**
@@ -88,8 +108,13 @@ public class Lesson2 {
    */
   private void exercise4() throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(
-        Paths.get("SonnetI.txt"), StandardCharsets.UTF_8)) {
-      /* YOUR CODE HERE */
+        Paths.get("Sonnet.txt"), StandardCharsets.UTF_8)) {
+
+        long numberOfLines = reader.lines()
+                .peek(System.out::println)
+                .count();
+
+        System.out.println("Number of lines : " + numberOfLines);
     }
   }
   
@@ -101,8 +126,14 @@ public class Lesson2 {
    */
   private void exercise5() throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(
-        Paths.get("SonnetI.txt"), StandardCharsets.UTF_8)) {
-      /* YOUR CODE HERE */
+        Paths.get("Sonnet.txt"), StandardCharsets.UTF_8)) {
+
+        List<String> listOfWordsNoDupes = reader.lines()
+                .flatMap((s) -> Stream.of(s.split(WORD_REGEXP)))
+                .distinct()
+                .collect(Collectors.toList());
+
+        listOfWordsNoDupes.forEach(System.out::println);
     }
   }
   
@@ -113,8 +144,16 @@ public class Lesson2 {
    */
   private void exercise6() throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(
-        Paths.get("SonnetI.txt"), StandardCharsets.UTF_8)) {
-      /* YOUR CODE HERE */
+        Paths.get("Sonnet.txt"), StandardCharsets.UTF_8)) {
+
+        List<String> wordsNoDupesLowerCaseNaturalSort = reader.lines()
+                .flatMap((String s) -> Stream.of(s.split(WORD_REGEXP)))
+                .distinct()
+                .map(String::toLowerCase)
+                .sorted(Comparator.<String>naturalOrder())
+                .collect(Collectors.toList());
+
+        wordsNoDupesLowerCaseNaturalSort.forEach(System.out::println);
     }
   }
   
@@ -123,8 +162,15 @@ public class Lesson2 {
    */
   private void exercise7() throws IOException {
     try (BufferedReader reader = Files.newBufferedReader(
-        Paths.get("SonnetI.txt"), StandardCharsets.UTF_8)) {
-      /* YOUR CODE HERE */
+        Paths.get("Sonnet.txt"), StandardCharsets.UTF_8)) {
+      List<String> modifiedToLengthSort = reader.lines()
+              .flatMap((String s) -> Stream.of(s.split(WORD_REGEXP)))
+              .distinct()
+              .map(String::toLowerCase)
+              .sorted(Comparator.comparing(String::length))
+              .collect(Collectors.toList());
+
+        modifiedToLengthSort.forEach(System.out::println);
     }
   }
 
@@ -135,7 +181,7 @@ public class Lesson2 {
    * @throws IOException If file access does not work
    */
   public static void main(String[] args) throws IOException {
-    Lesson2 lesson = new Lesson2();
+    HomeworkLesson2 lesson = new HomeworkLesson2();
     lesson.runExercises();
   }
 }
